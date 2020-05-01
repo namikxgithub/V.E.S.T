@@ -1,0 +1,498 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <conio.h>
+
+void railFence (char *str, char *output, int length, int A);
+void railFence2 (char *str, char *output, int length, int A, int B);
+void railFence2dec (char *str, char *output, int length, int A, int B,int dir);
+
+int main()
+{
+    FILE *fr;
+    FILE *fw1, *fw2, *fw3;
+    char ch;
+    do{
+    int D;
+
+    printf("==========================================\n");
+    printf("                 Menu\n");
+    printf("==========================================\n");
+    printf("1.Do you wish to input manually?\n");
+    printf("2.Do you wish to take input from file?\n");
+
+    scanf("%d", &D);
+    system("cls");
+
+    if ( D == 1) {
+
+    int N;
+
+    printf("==========================================\n");
+    printf("                 Menu\n");
+    printf("==========================================\n");
+    printf("1.Classical Rail-fence encryption\n", N);
+    printf("2.Level 2 Rail-fence encryption\n", N);
+    printf("3.Level 2 Rail-fence decryption\n", N);
+    printf("4.Exit\n", N);
+
+    scanf("%d",&N);
+    system("cls");
+
+    if ( N == 1 )
+    {
+
+   fw1 = fopen("classical rail fence.txt", "w");
+
+
+  char *output[1024];
+  char *str[1000];
+
+  int i = 0, A, length;
+
+  printf ("Enter a Secret Message\n");
+  scanf (" %[^\n]%*c", str);
+  length = strlen (str);
+
+  printf ("Enter number of rails\n");
+  scanf ("%d", &A);
+
+  railFence (&str, &output, length, A);
+  printf ("%s\n", output);
+
+        fprintf(fw1, "Secret Message = %s\n", str);
+        fprintf(fw1, "Number of rails = %d\n", A);
+        fprintf(fw1, "Encrypted Message = %s", output);
+
+        fclose(fw1);
+
+    }
+
+    if ( N == 2)
+    {
+
+  int i = 0, A, B, length;
+
+  fw2 = fopen("level 2 encryption.txt", "w");
+
+  char output[1024];
+  char str[1000];
+  printf ("Enter a Secret Message\n");
+  scanf (" %[^\n]%*c", str);
+
+  printf ("Enter larger number of rails\n");
+  scanf ("%d", &A);
+  printf ("Enter number of rails 2\n");
+  scanf ("%d", &B);
+  length = strlen (str);
+
+  railFence2 (&str, &output, length, A, B);
+  printf ("%s\n", output);
+
+        fprintf(fw2, "Secret Message = %s\n", str);
+        fprintf(fw2, "Number of larger rails = %d\n", A);
+        fprintf(fw2, "Number of smaller rails = %d\n", B);
+        fprintf(fw2, "Encrypted Message = %s", output);
+
+        fclose(fw2);
+
+
+    }
+
+    if ( N == 3) {
+
+  int i = 0, A, B, length;
+
+   fw3 = fopen("level 2 decryption.txt", "w");
+
+  char output[1024];
+  char str[1000];
+  printf ("Enter a Encrypted Message\n");
+  scanf (" %[^\n]%*c", str);
+
+  printf ("Enter larger number of rails\n");
+  scanf ("%d", &A);
+  printf ("Enter number of rails 2\n");
+  scanf ("%d", &B);
+  length = strlen (str);
+
+  railFence2dec (&str, &output, length, A, B, 0);
+  printf ("%s", output);
+
+        fprintf(fw3, "Encrypted Message = %s\n", str);
+        fprintf(fw3, "Number of larger rails = %d\n", A);
+        fprintf(fw3, "Number of smaller rails = %d\n", B);
+        fprintf(fw3, "Decrypted Message = %s", output);
+
+        fclose(fw3);
+
+
+    }
+
+    if ( N == 4) {
+
+        exit(1);
+    }
+}
+
+
+
+
+
+
+    if ( D == 2 ) {
+
+         int n;
+
+            fr = fopen("input in this.txt", "r");
+
+
+        fscanf(fr, "%d", &n);
+
+        if ( n == 1){
+
+  fw1 = fopen("classical rail fence.txt", "w");
+
+  char *output[1024];
+  char *str[1000];
+
+  int i = 0, A, length;
+
+
+     if( fgets (str, 60, fr)!=NULL )
+   {
+       puts(str);
+   }
+
+  length = strlen (str);
+  fscanf (fr,"%d", &A);
+
+  railFence (&str, &output, length, A);
+  printf ("%s\n", output);
+
+        fprintf(fw1, "Secret Message = %s\n", str);
+        fprintf(fw1, "Number of rails = %d\n", A);
+        fprintf(fw1, "Encrypted Message = %s", output);
+
+        fclose(fw1);
+
+
+        }
+
+
+        if ( n == 2){
+
+
+        }
+
+
+        if ( n == 3){
+
+
+        }
+
+
+
+
+    }
+
+        printf ("\n\n\n\Do you want to repeat the operation Y/N: \n");
+        scanf (" %c", &ch);
+        system("cls");
+
+}
+ while (ch == 'y' || ch == 'Y');
+}
+
+void railFence (char *str, char *output, int length, int A)
+{
+  int i, j, q, count;
+
+  char code[A][length];
+
+  for (i = 0; i < A; i++)
+    {
+      for (j = 0; j < length; j++)
+	{
+	  code[i][j] = 0;
+	}
+    }
+
+  count = 0;
+  j = 0;
+
+  while (j < length)
+    {
+      if (count % 2 == 0)
+	{
+	  for (i = 0; i < A; i++)
+	    {
+	      code[i][j] = (int) str[j];
+	      j++;
+	    }
+
+	}
+      else
+	{
+
+	  for (i = A - 2; i > 0; i--)
+	    {
+	      code[i][j] = (int) str[j];
+	      j++;
+	    }
+	}
+
+      count++;
+    }
+
+  q = 0;
+
+  for (i = 0; i < A; i++)
+    {
+
+      for (j = 0; j < length; j++)
+	{
+
+	  if (code[i][j] != 0)
+	    {
+	      output[q] = code[i][j];
+	      q++;
+	    }
+	}
+    }
+ output[q] = '\0';
+}
+
+void railFence2 (char *str, char *output, int length, int A, int B)
+{
+  int i, j, c, p, q, y, count;
+
+  char code[A][length];
+
+  for (i = 0; i < A; i++)
+    {
+      for (j = 0; j < length; j++)
+	{
+	  code[i][j] = 0;
+	}
+    }
+  p = 0;
+  q = 0;
+  j = 0;
+  count = 1;
+
+  for (i = 0; i < A; i++)
+    {
+      code[i][j] = (int) str[j];
+      j++;
+    }
+  y = B;
+
+
+  while (j < length)
+    {
+
+      if (q == 0)
+	{
+	  i = i - 2;
+	  for (int x = 1; x < y; x++)
+	    {
+	      code[i][j] = (int) str[j];
+	      i--;
+	      j++;
+
+	    }
+	  q = 1;
+	}
+
+      else
+	{
+	  i = i + 2;
+	  for (int x = 1; x < y; x++)
+	    {
+	      code[i][j] = (int) str[j];
+	      i++;
+	      j++;
+
+	    }
+	  q = 0;
+	}
+
+      if (count % 2 == 0)
+	{
+	  if (y == B)
+	    y = A;
+	  else
+	    y = B;
+	}
+
+      count++;
+
+    }
+  q = 0;
+
+  for (i = 0; i < A; i++)
+    {
+
+      for (j = 0; j < length; j++)
+	{
+
+	  if (code[i][j] != 0)
+	    {
+	      output[q] = code[i][j];
+	      q++;
+	    }
+	}
+    }
+ output[q] = '\0';
+}
+
+
+void railFence2dec (char *str, char *output, int length, int A, int B,int dir)
+{
+
+  int i, j, c, p, q, y, k, m=0, count;
+
+  char code[100][1000];
+
+
+    for(i=0;i<A;i++)
+         {
+          for(j=0;j<length;j++)
+          {
+           code[i][j]= 0;
+          }
+         }
+
+
+         p = 0;
+         q = 0;
+         j = 0;
+         count = 1;
+
+         for(i=0;i<A;i++)
+                 {
+                  code[i][j]= -1;
+                  j++;
+                 }
+                 y=B;
+
+
+         while(j<length) {
+
+
+
+                        if(q==0) {
+                                i=i-2;
+                            for(int x=1 ; x<y ; x++)
+                            {
+                                code[i][j]= -1;
+                                i--;
+                                j++;
+
+                            }
+                            q=1;}
+
+                         else{
+                             i=i+2;
+                            for(int x=1 ; x<y ; x++)
+                            {
+                                code[i][j]= -1;
+                                i++;
+                                j++;
+
+                            }
+                         q=0;}
+
+                         if(count%2==0)
+                         {
+                           if(y==B)
+                                y=A;
+                           else
+                            y=B;
+                         }
+
+
+                            count++;
+         }
+
+         k = 0;
+      for(i=0;i<A;i++)
+         {
+
+        for(j=0;j<length;j++)
+         {
+
+          if (code[i][j] != 0)
+            {
+               code[i][j]=(int)str[k];
+               k++;
+
+            }
+         }
+         }
+
+         p = 0;
+         q = 0;
+         j = 0;
+         count = 1;
+
+         for(i=0;i<A;i++)
+                 {
+
+                    output[m] = code[i][j];
+                    m++;
+                    j++;
+                 }
+                 y=B;
+
+
+         while(j<length) {
+
+
+
+                        if(q==0) {
+                                i=i-2;
+                            for(int x=1 ; x<y ; x++)
+                            {
+
+                            output[m] = code[i][j];
+	                        m++;
+                            i--;
+                            j++;
+
+
+                            }
+                            q=1;}
+
+                         else{
+                             i=i+2;
+                            for(int x=1 ; x<y ; x++)
+                            {
+
+                               output[m] = code[i][j];
+                                m++;
+                                i++;
+                                j++;
+
+
+                            }
+                         q=0;}
+
+                         if(count%2==0)
+                         {
+                           if(y==B)
+                                y=A;
+                           else
+                            y=B;
+                         }
+
+
+                            count++;
+         }
+ output[m] = '\0';
+ output[m] = '\0';
+ output[m] = '\0';
+}
+
+
